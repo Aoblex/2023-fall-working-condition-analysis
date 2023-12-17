@@ -8,13 +8,15 @@
 
 ### 机器学习数据集
 
-用于训练机器学习预测模型的数据集，其中待处理的表格为用于训练的数据。其中自变量包括：
+用于训练机器学习预测模型的数据集。其中自变量包括：
 
 - 时间： 工况被记下的时间
 
-- 转速： speed of rotation
+- 转速<r/min>： speed of rotation
 
-- 扭矩： torque
+- 扭矩<N.m>： torque
+
+- 油耗量<kg/h>： fuel consumption
 
 - TJ实际轨压： TJ actual rail pressure
 
@@ -26,15 +28,13 @@
 
 - 空燃比： air-fuel ratio
 
-- GPF中心温度： GPF central tempterature
-
-- 油耗量： fuel consumption
+- T40<℃>： GPF central tempterature
 
 因变量为：
 
-- soot/mg/m3： soot的产生速度，需要单位转换的处理。
+- Exhaust Soot Concentration： soot的产生速度，单位为mg/m3，需要转换单位。
 
-数据集中`时间`为工况的记录时间，而`时间/s`为soot排放速度的记录时间，需要将两个时间对齐。
+需要将工况和soot的记录时间对齐使自变量和因变量匹配。
 
 ### 排放数据
 
