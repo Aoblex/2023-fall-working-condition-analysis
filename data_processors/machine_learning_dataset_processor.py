@@ -38,8 +38,29 @@ validation_sheet_name = [
 """ Convert sheets to dataframe """
 raw_datasets: List[Tuple[pd.DataFrame, pd.DataFrame]] = []
 for X_sheet_name, Y_sheet_name in dataset_sheet_names:
-    X_dataset = excel_dataset.parse(X_sheet_name)
-    Y_dataset = excel_dataset.parse(Y_sheet_name)
+    
+    """ Convert to dataframe """
+    X_dataset: pd.DataFrame = excel_dataset.parse(X_sheet_name)
+    Y_dataset: pd.DataFrame = excel_dataset.parse(Y_sheet_name)
+    
+    """ Process time """
+    X_dataset.loc[:, "时间"] = X_dataset["时间"].apply(extract_time) # Convert time strings to integers.
+    Y_dataset.loc[:, "时间"] = Y_dataset["时间"].apply(extract_time) # Convert time strings to start time.
+    Y_dataset.loc[:, "时间"] = (Y_dataset["时间"] + Y_dataset["Relative Time"]).apply(math.ceil) # Compute real timestamp.
+    
+    """ Feature selection """
+    response_name = "Exhaust Soot Concentration"
+    X_dataset = X_dataset[soot_selected_features] # Select features for soot.
+    Y_dataset = Y_dataset[["时间", response_name]] # Select soot values.
+
+    """ Process soot """
+    Y_dataset.loc[:, response_name] = Y_dataset[response_name].apply(lambda soot: max(soot, 0)) # Avoid negative values.
+
+    """ Average by time """
+    X_dataset = X_dataset.groupby("时间").mean().reset_index()
+    Y_dataset = Y_dataset.groupby("时间").mean().reset_index()
+
+    """ Append to raw_datasets """
     raw_datasets.append((X_dataset, Y_dataset,))
 
 
@@ -52,19 +73,6 @@ def get_soot_dataset(X_dataset: pd.DataFrame, Y_dataset: pd.DataFrame) -> pd.Dat
         a pandas dataframe with column names changed containing Xs and ys for soot prediction.
     """
     
-    """ Process time """
-    response_name = "Exhaust Soot Concentration"
-    X_dataset.loc[:, "时间"] = X_dataset["时间"].apply(extract_time) # Convert time strings to integers.
-    Y_dataset.loc[:, "时间"] = Y_dataset["时间"].apply(extract_time) # Convert time strings to start time.
-    Y_dataset.loc[:, "时间"] = (Y_dataset["时间"] + Y_dataset["Relative Time"]).apply(math.ceil) # Compute real timestamp.
-    X_dataset = X_dataset[soot_selected_features] # Select features for soot.
-    Y_dataset = Y_dataset[["时间", response_name]] # Select soot values.
-    Y_dataset.loc[:, response_name] = Y_dataset[response_name].apply(lambda soot: max(soot, 0)) # Avoid negative values.
-    
-    """ Average by time """
-    X_dataset = X_dataset.groupby("时间").mean().reset_index()
-    Y_dataset = Y_dataset.groupby("时间").mean().reset_index()
-
     """ Inner connect Xs and Ys by time."""
     soot_dataset = pd.merge(X_dataset, Y_dataset, on="时间", how="inner") # Merge Xs and Ys.
     soot_dataset = soot_dataset.drop(columns=["时间"]) # Time is no longer needed since Xs and Ys are merged.
@@ -72,7 +80,17 @@ def get_soot_dataset(X_dataset: pd.DataFrame, Y_dataset: pd.DataFrame) -> pd.Dat
     soot_dataset.loc[:, "soot"] = soot_dataset.apply(soot_conversion, axis=1) # Unit conversion of soot.
     return soot_dataset
     
+
+""" Generate soot dataset for each cycle """
 for i, (X_dataset, Y_dataset) in enumerate(raw_datasets):
     soot_dataset = get_soot_dataset(X_dataset, Y_dataset)
     soot_filename = f"round_{i+1}_soot.csv"
     soot_dataset.to_csv(os.path.join(PROCESSED_DATASET_FOLDER, soot_filename), index=False)
+
+""" Generate overall soot dataset """
+all_X_dataset = pd.concat([raw_dataset[0] for raw_dataset in raw_datasets], axis=0, ignore_index=True)
+all_Y_dataset = pd.concat([raw_dataset[1] for raw_dataset in raw_datasets], axis=0, ignore_index=True)
+all_soot_dataset = get_soot_dataset(all_X_dataset, all_Y_dataset)
+all_soot_filename = f"all_soot.csv"
+all_soot_dataset.to_csv(os.path.join(PROCESSED_DATASET_FOLDER, all_soot_filename), index=False)
+
