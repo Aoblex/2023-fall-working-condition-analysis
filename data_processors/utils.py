@@ -1,3 +1,4 @@
+import pandas as pd
 import math
 import re
 from datetime import datetime
@@ -21,6 +22,9 @@ def extract_time(time_string: str) -> int:
         return math.ceil(time_extracted.timestamp())
     else:
         raise ValueError("Not a string of time.")
+
+def soot_conversion(row: pd.DataFrame) -> float:
+    return (row["airflow"]/1.205 + row["fuel consumption"]/751.7)/3600*row["soot"]
 
 if __name__ == "__main__":
     """"""
