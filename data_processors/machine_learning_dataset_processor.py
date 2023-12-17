@@ -3,7 +3,6 @@ Processes machine learning dataset
 
 1. Change column names.
 2. Align features and responses according to time.
-3. Seperate datasets for soot and for GPF.
 """
 
 from typing import List, Tuple
@@ -31,9 +30,7 @@ dataset_sheet_names = [
     ('原始数据X-2', '原始数据Y-2'),
     ('原始数据X-3', '原始数据Y-3'),
 ]
-validation_sheet_name = [
-    '验证原始数据',
-]
+validation_sheet_name = '验证原始数据X'
 
 """ Convert sheets to dataframe """
 raw_datasets: List[Tuple[pd.DataFrame, pd.DataFrame]] = []
@@ -94,3 +91,12 @@ all_soot_dataset = get_soot_dataset(all_X_dataset, all_Y_dataset)
 all_soot_filename = f"all_soot.csv"
 all_soot_dataset.to_csv(os.path.join(PROCESSED_DATASET_FOLDER, all_soot_filename), index=False)
 
+""" Generate validation soot dataset """
+val_X_dataset: pd.DataFrame = excel_dataset.parse(validation_sheet_name)
+val_X_dataset.loc[:, "时间"] = val_X_dataset["时间"].apply(extract_time) # Convert time strings to integers.
+val_X_dataset = val_X_dataset[soot_selected_features] # Select features for soot.
+val_X_dataset = val_X_dataset.groupby("时间").mean().reset_index()
+val_X_dataset = val_X_dataset.drop(columns=["时间"]) # We don't need time in validation set.
+val_soot_dataset = val_X_dataset.rename(columns=RENAME_DICT) # Rename columns.
+val_soot_filename = f"val_soot.csv"
+val_soot_dataset.to_csv(os.path.join(PROCESSED_DATASET_FOLDER, val_soot_filename), index=False)
