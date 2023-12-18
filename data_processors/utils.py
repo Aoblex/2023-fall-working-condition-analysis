@@ -2,6 +2,7 @@ import pandas as pd
 import math
 import re
 from datetime import datetime
+from data_config import *
 
 def extract_time(time_string: str) -> int:
     """Convert time_strings to integer timestamps
@@ -24,9 +25,8 @@ def extract_time(time_string: str) -> int:
         raise ValueError("Not a string of time.")
 
 def soot_conversion(row: pd.DataFrame) -> float:
-    return (row["airflow"]/1.205 + row["fuel consumption"]/751.7)/3600*row["soot"]
+    return (row["空气流量"]/1.205 + row["油耗量<kg/h>"]/751.7)/3600*row[SOOT_NAME]
 
 if __name__ == "__main__":
-    """"""
     import doctest
     doctest.testmod()

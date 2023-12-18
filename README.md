@@ -12,23 +12,23 @@
 
 - 时间： 工况被记下的时间
 
-- 转速<r/min>： speed of rotation
+- 转速<r/min>
 
-- 扭矩<N.m>： torque
+- 扭矩<N.m>
 
-- 油耗量<kg/h>： fuel consumption
+- 油耗量<kg/h>
 
-- TJ实际轨压： TJ actual rail pressure
+- TJ实际轨压
 
-- 点火角： ignition angle
+- 点火角
 
-- 节气门实际开度： throttle 
+- 节气门实际开度
 
-- 空气流量： airflow
+- 空气流量
 
-- 空燃比： air-fuel ratio
+- 空燃比
 
-- T40<℃>： GPF central tempterature
+- T40<℃>： GPF中心温度 
 
 因变量为：
 
@@ -38,3 +38,16 @@
 
 ### 排放数据
 
+包含 $CO, CO_2, NO_x$ 等尾气的排放数据。
+
+### 再生速率
+
+不同GPF中心温度、不同碳载量的情况下，断油时的再生速率。自变量包含：
+
+- 碳载量/g
+
+- 温度/℃
+
+因变量为：
+
+- 速率/mg/s: soot的再生速率。
