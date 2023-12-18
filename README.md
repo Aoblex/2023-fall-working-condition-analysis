@@ -51,3 +51,17 @@
 因变量为：
 
 - 速率/mg/s: soot的再生速率。
+
+## processed_dataset
+
+经处理后的数据集如下：
+
+- all_GPF_dataset.csv: 三轮数据合并后的GPF训练数据集。
+
+- all_soot_dataset.csv: 三轮数据合并后的soot训练数据集。
+
+- round_k_GPF_dataset.csv: 第k轮数据的GPF数据集。
+
+- round_k_soot_dataset.csv: 第k轮数据的soot数据集。
+
+- validation_dataset.csv: 用于模拟验证的数据集，其中不含GPF中心温度特征。
