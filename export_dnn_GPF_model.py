@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader
 from config.model_config import *
 from config.data_config import *
-from config.dnn_soot_config import *
+from config.dnn_GPF_config import *
 from utils import clean_data, check_file_exists
 import pandas as pd
 import shutil
@@ -26,11 +26,11 @@ class MyDataset(Dataset):
 
 
 def main():
-    """ Train DNN soot model """
+    """ Train DNN GPF model """
 
     """ Set model name """
-    dnn_name = f"{DNN_NAME}_soot"
-    soot_filename = SOOT_FILENAME
+    dnn_name = f"{DNN_NAME}_GPF"
+    GPF_filename = GPF_FILENAME 
 
 
     """ Remove previous dnn """
@@ -41,7 +41,7 @@ def main():
 
 
     """ Read dataset """
-    dataset_path = os.path.join(PROCESSED_DATASET_FOLDER, soot_filename)
+    dataset_path = os.path.join(PROCESSED_DATASET_FOLDER, GPF_filename)
     check_file_exists(dataset_path)
     dataset = pd.read_csv(dataset_path)
     X: pd.DataFrame = dataset.iloc[:, :-1]

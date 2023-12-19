@@ -12,7 +12,7 @@ from sklearn.preprocessing import FunctionTransformer
 from sklearn.model_selection import KFold
 from sklearn.compose import TransformedTargetRegressor
 
-from config.svr_config import *
+from config.svr_soot_config import *
 from config.model_config import *
 from config.data_config import *
 from utils import check_file_exists, clean_data

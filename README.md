@@ -110,7 +110,7 @@
 
     - PARAMETERS_FOLDER: 存放模型参数的文件夹
 
-- [svr_config.csv](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html#sklearn.svm.SVR):
+- [svr_{GPF, soot}_config.csv](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html#sklearn.svm.SVR):
 
     - N_SPLITS: k折交叉验证的k值
 
@@ -122,7 +122,7 @@
 
     - SVR_NAME: 模型的名字，用于文件和文件夹命名
 
-- dnn_config.csv:
+- dnn_{GPF, soot}_config.csv:
 
     - DNN_NAME: DNN模型名称，用于文件和文件夹命名
 

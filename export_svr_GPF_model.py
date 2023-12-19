@@ -6,7 +6,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import KFold
 import pickle
-from config.svr_config import *
+from config.svr_GPF_config import *
 from config.model_config import *
 from config.data_config import *
 from utils import check_file_exists, clean_data
