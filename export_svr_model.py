@@ -20,8 +20,7 @@ def main(dataset_name=SOOT_FILENAME):
     svr_folder = os.path.join(MODEL_FOLDER, SVR_NAME)
     if os.path.exists(svr_folder):
         shutil.rmtree(svr_folder)
-    else:
-        os.makedirs(svr_folder, exist_ok=True)
+    os.makedirs(svr_folder, exist_ok=True)
 
 
     """ Read dataset and split into Xs and ys """
