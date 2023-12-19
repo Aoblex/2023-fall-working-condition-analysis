@@ -1,26 +1,29 @@
 import os
+import shutil
+import pickle
+import numpy as np
 import pandas as pd
+
 from sklearn.metrics import mean_squared_error
 from sklearn.svm import SVR
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import FunctionTransformer
 from sklearn.model_selection import KFold
-import pickle
+from sklearn.compose import TransformedTargetRegressor
+
 from config.svr_config import *
 from config.model_config import *
 from config.data_config import *
 from utils import check_file_exists, clean_data
-import shutil
 
-def main(dataset_name=SOOT_FILENAME):
-    """Train SVR Model"""
+def main():
+    """Train SVR Soot Model"""
 
+    
     """ Set model name """
-    if dataset_name == SOOT_FILENAME:
-        svr_name = f"{SVR_NAME}_soot"
-    else:
-        svr_name = f"{SVR_NAME}_GPF"
-
+    svr_name = f"{SVR_NAME}_soot"
+    soot_filename = SOOT_FILENAME
 
     """ Remove previous SVR """
     svr_folder = os.path.join(MODEL_FOLDER, svr_name)
@@ -30,7 +33,7 @@ def main(dataset_name=SOOT_FILENAME):
 
 
     """ Read dataset and split into Xs and ys """
-    dataset_path = os.path.join(PROCESSED_DATASET_FOLDER, dataset_name)
+    dataset_path = os.path.join(PROCESSED_DATASET_FOLDER, soot_filename)
     check_file_exists(dataset_path)
     dataset = pd.read_csv(dataset_path)
     X, y = dataset.iloc[:, :-1], dataset.iloc[:, -1]
@@ -52,7 +55,16 @@ def main(dataset_name=SOOT_FILENAME):
 
 
         """ Train model """
-        svr_model = make_pipeline(StandardScaler(), SVR(kernel=KERNEL, C=C, tol=TOL))
+        log_transformer = FunctionTransformer(np.log1p, inverse_func=np.expm1)
+
+        svr_pipeline = make_pipeline(
+            StandardScaler(),
+            SVR(kernel=KERNEL, C=C, tol=TOL),)
+        
+        svr_model = TransformedTargetRegressor(
+            regressor=svr_pipeline,
+            transformer=log_transformer,)
+        
         svr_model.fit(X_train, y_train)
         svr_list.append(svr_model)
 
@@ -112,5 +124,4 @@ def main(dataset_name=SOOT_FILENAME):
     all_metrics.to_csv(all_metrics_filepath, index=True)
 
 if __name__ == "__main__":
-    main(SOOT_FILENAME)
-    main(GPF_FILENAME)
+    main()
