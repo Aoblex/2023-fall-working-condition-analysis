@@ -122,8 +122,21 @@
 
     - SVR_NAME: 模型的名字，用于文件和文件夹命名
 
+- dnn_config.csv:
 
+    - DNN_NAME: DNN模型名称，用于文件和文件夹命名
 
+    - DEVICE: DNN计算的设备
+
+    - LEARNING_RATE: 学习率
+
+    - ACTIVATION_FUNCTION: 激活函数
+
+    - BATCH_SIZE: 每个批量的样本数量
+
+    - NUM_EPOCHS: 循环轮数
+
+    - SPLIT_RATE: 用于训练模型的百分比
 
 ## 数据加工
 

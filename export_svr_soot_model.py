@@ -79,33 +79,32 @@ def main():
             pickle.dump(svr_model, f)
 
 
-        """ Make predictions """
+        """ Save predictions """
+        y_true, y_pred = y_test, svr_model.predict(X_test)
+        prediction_filename = f"{fold}th_fold_predictions.csv"
+        prediction_filefolder = os.path.join(MODEL_FOLDER, svr_name, PREDICTIONS_FOLDER)
+        prediction_filepath = os.path.join(prediction_filefolder, prediction_filename)
+        os.makedirs(prediction_filefolder, exist_ok=True)
+        predictions = pd.DataFrame(data={
+            "y_true": y_true,
+            "y_pred": y_pred,
+        })
+        predictions.to_csv(prediction_filepath, index=False)
+
+
+        """ Save metrics """
         metrics_filename = f"{fold}th_fold_metrics.csv"
         metrics_filefolder = os.path.join(MODEL_FOLDER, svr_name, METRICS_FOLDER)
         metrics_filepath = os.path.join(metrics_filefolder, metrics_filename)
         os.makedirs(metrics_filefolder, exist_ok=True)
 
         metrics_df: pd.DataFrame = pd.DataFrame(columns=MODEL_METRICS.keys())
-        y_true, y_pred = y_test, svr_model.predict(X_test)
         model_metrics = [metric_function(y_true, y_pred) for metric_function in MODEL_METRICS.values()]
         metrics_df.loc[len(metrics_df)] = model_metrics
         all_metrics.loc[fold] = model_metrics
         mse_list.append(mean_squared_error(y_true, y_pred))
         
         metrics_df.to_csv(metrics_filepath, index=False)
-
-
-        """ Save predictions """
-        prediction_filename = f"{fold}th_fold_predictions.csv"
-        prediction_filefolder = os.path.join(MODEL_FOLDER, svr_name, PREDICTIONS_FOLDER)
-        prediction_filepath = os.path.join(prediction_filefolder, prediction_filename)
-        os.makedirs(prediction_filefolder, exist_ok=True)
-
-        predictions = pd.DataFrame(data={
-            "y_true": y_true,
-            "y_pred": y_pred,
-        })
-        predictions.to_csv(prediction_filepath, index=False)
 
 
     """ Find best model """
