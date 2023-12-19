@@ -112,4 +112,5 @@ def main(dataset_name=SOOT_FILENAME):
     all_metrics.to_csv(all_metrics_filepath, index=True)
 
 if __name__ == "__main__":
-    main()
+    main(SOOT_FILENAME)
+    main(GPF_FILENAME)
