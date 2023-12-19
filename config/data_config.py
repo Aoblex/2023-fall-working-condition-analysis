@@ -1,6 +1,6 @@
 """ Input and output folders """
-RAW_DATASET_FOLDER = "./raw_dataset/"
-PROCESSED_DATASET_FOLDER = "./processed_dataset"
+RAW_DATASET_FOLDER = "raw_dataset"
+PROCESSED_DATASET_FOLDER = "processed_dataset"
 
 
 """ Names of predictor variables """
