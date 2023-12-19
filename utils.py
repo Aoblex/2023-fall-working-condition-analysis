@@ -6,6 +6,11 @@ import re
 from typing import Tuple
 from datetime import datetime
 from config.data_config import *
+from config.model_config import *
+from config.svr_soot_config import *
+from config.svr_GPF_config import *
+from config.dnn_soot_config import *
+from config.dnn_GPF_config import *
 
 def extract_time(time_string: str) -> int:
     """Convert time_strings to integer timestamps
@@ -80,6 +85,26 @@ def clean_data(X: pd.DataFrame, y: pd.Series, threshold: float) -> Tuple[pd.Data
 
     return X_cleaned, y_cleaned
 
+def get_best_svr_GPF_index():
+    best_svr_GPF_txt = os.path.join(
+        MODEL_FOLDER,
+        f"{SVR_NAME}_GPF",
+        "best_model.txt",
+    )
+    with open(best_svr_GPF_txt, "r") as f:
+        index = int(f.read().strip())
+    return index
+
+
+def get_best_svr_soot_index():
+    best_svr_soot_txt = os.path.join(
+        MODEL_FOLDER,
+        f"{SVR_NAME}_soot",
+        "best_model.txt",
+    )
+    with open(best_svr_soot_txt, "r") as f:
+        index = int(f.read().strip())
+    return index
 
 if __name__ == "__main__":
     import doctest

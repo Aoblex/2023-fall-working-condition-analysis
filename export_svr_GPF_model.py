@@ -100,7 +100,7 @@ def main():
     best_filefolder = os.path.join(MODEL_FOLDER, svr_name)
     best_filepath = os.path.join(best_filefolder, best_filename)
     with open(best_filepath, 'w') as f:
-        f.write(f"{best_model_index}th fold")
+        f.write(f"{best_model_index}")
 
 
     """ Write all metrics """ 

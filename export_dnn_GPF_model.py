@@ -71,15 +71,15 @@ def main():
     dnn_model = torch.nn.Sequential(
         torch.nn.Linear(len(X.columns), 32),
         torch.nn.BatchNorm1d(32),
-        ACTIVATION_FUNCTION,
+        torch.nn.ReLU(),
         torch.nn.Linear(32, 64),
-        ACTIVATION_FUNCTION,
+        torch.nn.ReLU(),
         torch.nn.Linear(64, 64),
-        ACTIVATION_FUNCTION,
+        torch.nn.ReLU(),
         torch.nn.Linear(64, 32),
-        ACTIVATION_FUNCTION,
+        torch.nn.ReLU(),
         torch.nn.Linear(32, 16),
-        ACTIVATION_FUNCTION,
+        torch.nn.ReLU(),
         torch.nn.Linear(16, 1),
     )
     dnn_model.to(device=DEVICE)

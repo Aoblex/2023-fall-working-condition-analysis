@@ -23,7 +23,6 @@ def main():
     
     """ Set model name """
     svr_name = f"{SVR_NAME}_soot"
-    soot_filename = SOOT_FILENAME
 
     """ Remove previous SVR """
     svr_folder = os.path.join(MODEL_FOLDER, svr_name)
@@ -33,7 +32,7 @@ def main():
 
 
     """ Read dataset and split into Xs and ys """
-    dataset_path = os.path.join(PROCESSED_DATASET_FOLDER, soot_filename)
+    dataset_path = os.path.join(PROCESSED_DATASET_FOLDER, SOOT_FILENAME)
     check_file_exists(dataset_path)
     dataset = pd.read_csv(dataset_path)
     X, y = dataset.iloc[:, :-1], dataset.iloc[:, -1]
@@ -113,7 +112,7 @@ def main():
     best_filefolder = os.path.join(MODEL_FOLDER, svr_name)
     best_filepath = os.path.join(best_filefolder, best_filename)
     with open(best_filepath, 'w') as f:
-        f.write(f"{best_model_index}th fold")
+        f.write(f"{best_model_index}")
 
 
     """ Write all metrics """ 
