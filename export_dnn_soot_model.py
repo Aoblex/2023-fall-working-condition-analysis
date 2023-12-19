@@ -92,10 +92,12 @@ def main():
 
 
     """ Start training """
+    iteration_count = 0
     for epoch in range(NUM_EPOCHS):
         for i, (X, y) in enumerate(train_loader):
             
             """ Initialize training """
+            iteration_count += 1
             dnn_model.train(True)
             optimizer.zero_grad()
 
@@ -125,8 +127,9 @@ def main():
                 current_test_mse_list.append(loss_fn(y_test, y_test_pred).item())
 
             """ Record current loss """
-            training_losses.append(loss.item())
-            test_losses.append(sum(current_test_mse_list)/len(current_test_mse_list))
+            if iteration_count % 10 == 0:
+                training_losses.append(loss.item())
+                test_losses.append(sum(current_test_mse_list)/len(current_test_mse_list))
     
 
     """ Save model """
@@ -174,6 +177,7 @@ def main():
     losses_filefolder = os.path.join(MODEL_FOLDER, dnn_name, PICTURES_FOLDER)
     losses_filepath = os.path.join(losses_filefolder, losses_filename)
     os.makedirs(losses_filefolder, exist_ok=True)
+    plt.clf()
     plt.title("Training and Testing Loss")
     plt.xlabel("Num Batches")
     plt.ylabel("MSE Loss")

@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 from sklearn.metrics import mean_squared_error
 from sklearn.svm import SVR
 from sklearn.pipeline import make_pipeline
@@ -95,7 +96,7 @@ def main():
 
 
     """ Find best model """
-    best_model_index = mse_list.index(min(mse_list))
+    best_model_index = np.argmin(mse_list) + 1
     best_filename = "best_model.txt"
     best_filefolder = os.path.join(MODEL_FOLDER, svr_name)
     best_filepath = os.path.join(best_filefolder, best_filename)

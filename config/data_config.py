@@ -24,8 +24,10 @@ ID_NAME = "时间"
 
 """ Input and output file names """
 RAW_DATA_FILENAME = "机器学习数据集.xlsx"
+RAW_REGENERATION_FILENAME = "再生速率.xlsx"
 SOOT_FILENAME = "soot_dataset.csv"
 GPF_FILENAME = "GPF_dataset.csv"
+REGENERATION_FILENAME = "regeneration_dataset.csv"
 VALIDATION_FILENAME = "validation_dataset.csv"
 
 
