@@ -10,10 +10,18 @@ from config.svr_config import *
 from config.model_config import *
 from config.data_config import *
 from utils import check_file_exists, clean_data
-
+import shutil
 
 def main(dataset_name=SOOT_FILENAME):
     """Train SVR Model"""
+
+
+    """ Remove previous SVR """
+    svr_folder = os.path.join(MODEL_FOLDER, SVR_NAME)
+    if os.path.exists(svr_folder):
+        shutil.rmtree(svr_folder)
+    else:
+        os.makedirs(svr_folder, exist_ok=True)
 
 
     """ Read dataset and split into Xs and ys """
@@ -46,7 +54,7 @@ def main(dataset_name=SOOT_FILENAME):
 
         """ Save model """
         model_filename = f"{fold}th_fold_model.pkl"
-        model_filefolder = os.path.join(MODEL_FOLDER, MODEL_NAME, PARAMETERS_FOLDER)
+        model_filefolder = os.path.join(MODEL_FOLDER, SVR_NAME, PARAMETERS_FOLDER)
         model_filepath = os.path.join(model_filefolder, model_filename)
         os.makedirs(model_filefolder, exist_ok=True)
 
@@ -56,7 +64,7 @@ def main(dataset_name=SOOT_FILENAME):
 
         """ Make predictions """
         metrics_filename = f"{fold}th_fold_metrics.csv"
-        metrics_filefolder = os.path.join(MODEL_FOLDER, MODEL_NAME, METRICS_FOLDER)
+        metrics_filefolder = os.path.join(MODEL_FOLDER, SVR_NAME, METRICS_FOLDER)
         metrics_filepath = os.path.join(metrics_filefolder, metrics_filename)
         os.makedirs(metrics_filefolder, exist_ok=True)
 
@@ -72,7 +80,7 @@ def main(dataset_name=SOOT_FILENAME):
 
         """ Save predictions """
         prediction_filename = f"{fold}th_fold_predictions.csv"
-        prediction_filefolder = os.path.join(MODEL_FOLDER, MODEL_NAME, PREDICTIONS_FOLDER)
+        prediction_filefolder = os.path.join(MODEL_FOLDER, SVR_NAME, PREDICTIONS_FOLDER)
         prediction_filepath = os.path.join(prediction_filefolder, prediction_filename)
         os.makedirs(prediction_filefolder, exist_ok=True)
 
@@ -86,7 +94,7 @@ def main(dataset_name=SOOT_FILENAME):
     """ Find best model """
     best_model_index = mse_list.index(min(mse_list))
     best_filename = "best_model.txt"
-    best_filefolder = os.path.join(MODEL_FOLDER, MODEL_NAME)
+    best_filefolder = os.path.join(MODEL_FOLDER, SVR_NAME)
     best_filepath = os.path.join(best_filefolder, best_filename)
     with open(best_filepath, 'w') as f:
         f.write(f"{best_model_index}th fold")
@@ -94,9 +102,8 @@ def main(dataset_name=SOOT_FILENAME):
 
     """ Write all metrics """ 
     all_metrics_filename = "all_metrics.csv"
-    all_metrics_filefolder = os.path.join(MODEL_FOLDER, MODEL_NAME, METRICS_FOLDER)
+    all_metrics_filefolder = os.path.join(MODEL_FOLDER, SVR_NAME, METRICS_FOLDER)
     all_metrics_filepath = os.path.join(all_metrics_filefolder, all_metrics_filename)
-    print(all_metrics_filepath)
     all_metrics.to_csv(all_metrics_filepath, index=True)
 
 if __name__ == "__main__":
