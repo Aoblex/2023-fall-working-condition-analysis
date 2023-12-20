@@ -92,12 +92,10 @@ def main():
 
 
     """ Start training """
-    iteration_count = 0
     for epoch in range(NUM_EPOCHS):
         for i, (X, y) in enumerate(train_loader):
             
             """ Initialize training """
-            iteration_count += 1
             dnn_model.train(True)
             optimizer.zero_grad()
 
@@ -127,9 +125,8 @@ def main():
                 current_test_mse_list.append(loss_fn(y_test, y_test_pred).item())
 
             """ Record current loss """
-            if iteration_count % 10 == 0:
-                training_losses.append(loss.item())
-                test_losses.append(sum(current_test_mse_list)/len(current_test_mse_list))
+            training_losses.append(loss.item())
+            test_losses.append(sum(current_test_mse_list)/len(current_test_mse_list))
     
 
     """ Save model """
