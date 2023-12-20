@@ -168,6 +168,19 @@ def main():
     metrics_df.loc[len(metrics_df)] = model_metrics
     metrics_df.to_csv(metrics_filepath, index=False)
 
+    """ Save losses """
+    losses_filename = f"{DNN_NAME}_losses.csv"
+    losses_filefolder = os.path.join(MODEL_FOLDER, dnn_name, METRICS_FOLDER)
+    losses_filepath = os.path.join(losses_filefolder, losses_filename)
+    os.makedirs(losses_filefolder, exist_ok=True)
+
+    model_losses = pd.DataFrame({
+        "training_losses": training_losses,
+        "test_losses": test_losses,
+        }
+    )
+    model_losses.to_csv(losses_filepath, index=False)
+
 
     """ Save pictures """
     losses_filename = f"{DNN_NAME}_losses.png"
