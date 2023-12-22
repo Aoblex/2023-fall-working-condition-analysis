@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.metrics import mean_squared_error
 from sklearn.svm import SVR
 from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.model_selection import KFold
 from sklearn.compose import TransformedTargetRegressor
@@ -54,15 +54,8 @@ def main():
 
 
         """ Train model """
-        log_transformer = FunctionTransformer(np.log1p, inverse_func=np.expm1)
-
-        svr_pipeline = make_pipeline(
-            StandardScaler(),
-            SVR(kernel=KERNEL, C=C, tol=TOL),)
-        
-        svr_model = TransformedTargetRegressor(
-            regressor=svr_pipeline,
-            transformer=log_transformer,)
+        svr_model = TransformedTargetRegressor(regressor=make_pipeline(SVR(kernel=KERNEL, C=C, tol=TOL),),
+                                               func=np.log, inverse_func=np.exp)
         
         svr_model.fit(X_train, y_train)
         svr_list.append(svr_model)
